@@ -1,0 +1,20 @@
+volumes:
+  traefik-data:
+    driver: local
+
+services:
+  traefik:
+    env_file:
+      - ./.env
+    image: docker.io/library/traefik:3.1.2
+    container_name: traefik
+    ports: 
+    - 80:80
+    - 443:443
+    - 8081:8080
+    volumes:
+      - /run/docker.sock:/run/docker.sock:ro
+      - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
+      - ./config/conf/:/etc/traefik/conf/
+      - traefik-data:/etc/traefik/certs/
+    restart: unless-stopped

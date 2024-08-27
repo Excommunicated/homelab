@@ -2,6 +2,10 @@ volumes:
   traefik-data:
     driver: local
 
+networks:
+  frontend:
+    external: true
+
 services:
   traefik:
     env_file:
@@ -17,3 +21,6 @@ services:
       - ./config/conf/:/etc/traefik/conf/
       - traefik-data:/etc/traefik/certs/
     restart: unless-stopped
+    networks:
+      - frontend
+      

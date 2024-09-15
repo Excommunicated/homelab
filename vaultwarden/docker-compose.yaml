@@ -14,11 +14,13 @@ services:
       - SMTP_FROM=${VW_SMTP_FROM}
       - SMTP_USERNAME=${VW_SMTP_USERNAME}
       - SMTP_PASSWORD=${VW_SMTP_PASSWORD}
-      - LOG_FILE=/data/vaultwarden.log
+      - LOG_FILE=/vwlogs/vaultwarden.log
       - LOG_LEVEL=warn
       - EXTENDED_LOGGING=true
+      - IP_HEADER=CF-Connecting-IP
     volumes:
       - vaultwarden-data:/data/
+      - vaultwarden-logs:/vwlogs/
     networks:
       - vaultwarden-network
 
@@ -42,7 +44,7 @@ services:
       - vaultwarden-network
 
   cloudflared:
-    image: cloudflare/cloudflared:2024.5.0
+    image: cloudflare/cloudflared:2024.9.1
     container_name: vaultwarden-cloudflared
     restart: unless-stopped
     read_only: true
@@ -55,6 +57,19 @@ services:
     networks:
       - vaultwarden-network
 
+  fail2ban:
+    image: linuxserver/fail2ban:1.0.2
+    container_name: vaultwarden-fail2ban
+    restart: unless-stopped
+    volumes:
+      - vaultwarden-logs:/remotelogs/vaultwarden:ro
+      - ./fail2ban/config/jail-vaultwarden-auth.local:/config/fail2ban/jail.d/vaultwarden-auth.local
+      - ./fail2ban/config/action-cloudflare.local:/config/fail2ban/action.d/cloudflare.local
+    depends_on:
+      - cloudflared
+    networks:
+      - vaultwarden-network
+
 volumes:
   vaultwarden-data:
     # Specify the name of the volume where you save the vaultwarden data,
@@ -62,6 +77,8 @@ volumes:
     # and bitwardenrs-data for migrated users
     name: vaultwarden-data
     # name: bitwardenrs-data
+  vaultwarden-logs:
+    name: vaultwarden-logs
   vaultwarden-rclone-data:
     external: true
     # Specify the name of the volume where you save the rclone configuration,

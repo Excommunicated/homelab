@@ -1,2 +1,4 @@
 .env
 cloudflared-config/
+vaultwarden/fail2ban/config/
+!vaultwarden-auth.local

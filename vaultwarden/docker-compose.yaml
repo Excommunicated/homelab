@@ -18,6 +18,7 @@ services:
       - LOG_LEVEL=warn
       - EXTENDED_LOGGING=true
       - IP_HEADER=CF-Connecting-IP
+      - TZ=America/New_York
     volumes:
       - vaultwarden-data:/data/
       - vaultwarden-logs:/vwlogs/
@@ -60,15 +61,18 @@ services:
   fail2ban:
     image: linuxserver/fail2ban:1.0.2
     container_name: vaultwarden-fail2ban
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    network_mode: host
+    environment:
+      - TZ=America/New_York
     restart: unless-stopped
     volumes:
       - vaultwarden-logs:/remotelogs/vaultwarden:ro
-      - ./fail2ban/config/jail-vaultwarden-auth.local:/config/fail2ban/jail.d/vaultwarden-auth.local
-      - ./fail2ban/config/action-cloudflare.local:/config/fail2ban/action.d/cloudflare.local
+      - ./fail2ban/config/:/config/
     depends_on:
       - cloudflared
-    networks:
-      - vaultwarden-network
 
 volumes:
   vaultwarden-data:

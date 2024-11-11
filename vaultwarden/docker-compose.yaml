@@ -2,7 +2,7 @@ services:
 
   vaultwarden:
     container_name: vaultwarden
-    image: vaultwarden/server:1.32.0
+    image: vaultwarden/server:1.32.4
     restart: unless-stopped
     environment:
       - DOMAIN=${VW_DOMAIN}
@@ -27,7 +27,7 @@ services:
 
   backup:
     container_name: vaultwarden-backup
-    image: ttionya/vaultwarden-backup:latest
+    image: ttionya/vaultwarden-backup:1.21.2
     restart: always
     environment:
       - BACKUP_KEEP_DAYS=30
@@ -45,7 +45,7 @@ services:
       - vaultwarden-network
 
   cloudflared:
-    image: cloudflare/cloudflared:2024.9.1
+    image: cloudflare/cloudflared:2024.11.0
     container_name: vaultwarden-cloudflared
     restart: unless-stopped
     read_only: true
@@ -59,7 +59,7 @@ services:
       - vaultwarden-network
 
   fail2ban:
-    image: linuxserver/fail2ban:1.0.2
+    image: linuxserver/fail2ban:1.1.0
     container_name: vaultwarden-fail2ban
     cap_add:
       - NET_ADMIN

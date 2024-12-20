@@ -2,7 +2,7 @@ services:
 
   vaultwarden:
     container_name: vaultwarden
-    image: vaultwarden/server:1.32.4
+    image: vaultwarden/server:1.32.7
     restart: unless-stopped
     environment:
       - DOMAIN=${VW_DOMAIN}
@@ -27,7 +27,7 @@ services:
 
   backup:
     container_name: vaultwarden-backup
-    image: ttionya/vaultwarden-backup:1.21.2
+    image: ttionya/vaultwarden-backup:1.21.3
     restart: always
     environment:
       - BACKUP_KEEP_DAYS=30
@@ -45,7 +45,7 @@ services:
       - vaultwarden-network
 
   cloudflared:
-    image: cloudflare/cloudflared:2024.11.0
+    image: cloudflare/cloudflared:2024.12.2
     container_name: vaultwarden-cloudflared
     restart: unless-stopped
     read_only: true

@@ -27,7 +27,7 @@ services:
 
   backup:
     container_name: vaultwarden-backup
-    image: ttionya/vaultwarden-backup:1.21.3
+    image: ttionya/vaultwarden-backup:1.22.0
     restart: always
     environment:
       - BACKUP_KEEP_DAYS=30
@@ -45,7 +45,7 @@ services:
       - vaultwarden-network
 
   cloudflared:
-    image: cloudflare/cloudflared:2024.12.2
+    image: cloudflare/cloudflared:2025.1.0
     container_name: vaultwarden-cloudflared
     restart: unless-stopped
     read_only: true

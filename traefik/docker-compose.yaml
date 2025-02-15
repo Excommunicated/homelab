@@ -35,7 +35,7 @@ services:
       - "traefik.http.routers.traefik-secure.rule=Host(`traefik-docker.interactivebackdraft.com`)"
       - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
       - "traefik.http.routers.traefik-secure.tls=true"
-      - "traefik.http.routers.traefik-secure.tls.certresolver=staging"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=production"
       - "traefik.http.routers.traefik-secure.tls.domains[0].main=interactivebackdraft.com"
       - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.interactivebackdraft.com"
       - "traefik.http.routers.traefik-secure.service=api@internal"

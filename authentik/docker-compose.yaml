@@ -59,7 +59,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.authentik.rule=Host(`authentik.interactivebackdraft.com`)"
-      - "traefik.http.routers.authentik.entrypoints=websecure"
+      - "traefik.http.routers.authentik.entrypoints=https"
       - "traefik.http.routers.authentik.tls=true"
       - "traefik.http.routers.authentik.tls.certresolver=production"
       - "traefik.http.routers.authentik.service=authentik-svc"

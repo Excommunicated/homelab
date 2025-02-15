@@ -1,3 +1,7 @@
+secrets:
+  cf-token:
+    file: ./cf-token
+
 volumes:
   traefik-data:
     driver: local
@@ -10,13 +14,34 @@ services:
   traefik:
     env_file:
       - ./.env
-    image: docker.io/library/traefik:3.1.2
+    environment:
+      - TRAEFIK_DASHBOARD_CREDENTIALS=${TRAEFIK_DASHBOARD_CREDENTIALS}
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cf-token
+    image: traefik:latest
     container_name: traefik
+    security_opt:
+      - no-new-privileges:true
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=http"
+      - "traefik.http.routers.traefik.rule=Host(`traefik-docker.interactivebackdraft.com`)"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
+      - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
+      - "traefik.http.routers.traefik-secure.entrypoints=https"
+      - "traefik.http.routers.traefik-secure.rule=Host(`traefik-docker.interactivebackdraft.com)"
+      - "traefik.http.routers.traefik-secure.middlewares=traefik-auth"
+      - "traefik.http.routers.traefik-secure.tls=true"
+      - "traefik.http.routers.traefik-secure.tls.certresolver=staging"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].main=interactivebackdraft.com"
+      - "traefik.http.routers.traefik-secure.tls.domains[0].sans=*.interactivebackdraft.com"
+      - "traefik.http.routers.traefik-secure.service=api@internal"
     ports: 
     - 80:80
     - 443:443
     volumes:
-      - /run/docker.sock:/run/docker.sock:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./config/traefik.yaml:/etc/traefik/traefik.yaml:ro
       - ./config/conf/:/etc/traefik/conf/
       - traefik-data:/etc/traefik/certs/

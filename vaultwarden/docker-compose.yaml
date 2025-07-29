@@ -19,6 +19,7 @@ services:
       - EXTENDED_LOGGING=true
       - IP_HEADER=CF-Connecting-IP
       - TZ=America/New_York
+      - EXPERIMENTAL_CLIENT_FEATURE_FLAGS=fido2-vault-credentials,ssh-key-vault-item,ssh-agent
     volumes:
       - vaultwarden-data:/data/
       - vaultwarden-logs:/vwlogs/

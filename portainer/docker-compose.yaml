@@ -5,8 +5,6 @@ services:
   portainer:
     container_name: portainer
     image: portainer/portainer-ce:2.33.0
-    ports:
-      - 8000:8000
     volumes:
       - /run/docker.sock:/var/run/docker.sock
       - portainer-data:/data

@@ -2,3 +2,4 @@
 cloudflared-config/
 vaultwarden/fail2ban/config/
 !vaultwarden-auth.local
+traefik/config/conf/routes.yaml

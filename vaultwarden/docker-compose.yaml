@@ -2,7 +2,7 @@ services:
 
   vaultwarden:
     container_name: vaultwarden
-    image: vaultwarden/server:1.34.2
+    image: vaultwarden/server:1.35.7
     restart: unless-stopped
     environment:
       - DOMAIN=${VW_DOMAIN}
@@ -37,11 +37,11 @@ services:
 
   backup:
     container_name: vaultwarden-backup
-    image: ttionya/vaultwarden-backup:1.24.4
+    image: ttionya/vaultwarden-backup:1.26.6
     restart: always
     environment:
       - BACKUP_KEEP_DAYS=30
-      - BACKUP_FILE_SUFFIX=%Y%m%d%H%M
+      - BACKUP_FILE_SUFFIX=%Y%m%d%1H%M
       - ZIP_PASSWORD=${BACKUP_ZIP_PASSWORD}
       - MAIL_SMTP_ENABLE=TRUE
       - MAIL_SMTP_VARIABLES=${BACKUP_SMTP_VARIABLES}
@@ -55,7 +55,7 @@ services:
       - vaultwarden-network
 
   cloudflared:
-    image: cloudflare/cloudflared:2025.7.0
+    image: cloudflare/cloudflared:2026.3.0
     container_name: vaultwarden-cloudflared
     restart: unless-stopped
     read_only: true
